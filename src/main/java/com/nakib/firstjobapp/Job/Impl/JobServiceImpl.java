@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class JobServiceImpl implements JobService {
  // private List<Job> jobs = new ArrayList<>();
@@ -47,15 +49,16 @@ public class JobServiceImpl implements JobService {
 
   @Override
   public boolean updateJob(Long id, Job updatedJob) {
-    for(Job job:jobs){
-      if(job.getId().equals(id)){
+    Optional<Job> jobOptional = jobRepository.findById(id);
+      if(jobOptional.isPresent()){
+        Job job = jobOptional.get();
         job.setTitle(updatedJob.getTitle());
         job.setDescription(updatedJob.getDescription());
         job.setMaxSalary(updatedJob.getMaxSalary());
         job.setMinSalary(updatedJob.getMinSalary());
         job.setLocation(updatedJob.getLocation());
         return true;
-      }
+
     }
     return false;
   }
